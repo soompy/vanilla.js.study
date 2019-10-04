@@ -2,7 +2,7 @@
 
 
     // 실습 코드
-    /*
+
     var quotes = [
         {
             quote: "아이들은 누구나 예술가이다. 문제는 성인이 되어도, 예술가로 있을 수 있는지 여부이다.",
@@ -30,14 +30,18 @@
         }
     ];
 
+    
     var btn = document.getElementById('generate-btn');
+    var quote = document.getElementById("quote");
 
     btn.addEventListener('click', function () {
-
-
-
+        var random = Math.floor(Math.random() * quotes.length);
+        quote.textContent = quotes[random].quote;
+        // document.getElementById("quote").textContent = quotes[random].quote;
+        document.querySelector(".author").textContent = quotes[random].author;
+        console.log(quote);
     });
-    */
+
 
 
 

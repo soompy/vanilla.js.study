@@ -432,16 +432,36 @@
 
 
 
-    /*
-    var hexValue = document.getElementById('hex-value');
+  
+    var hexValue = document.getElementById('hex-value'); // 전역변수
     var btn = document.getElementById('btn');
 
-    btn.addEventListener('click', createHex);
+    btn.addEventListener('click', createHex); // 콜백함수
 
     function createHex() {
+       var hexValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, "A", "B", "C", "D", "E", "F"];
+       var hexColor = '#';
+
+       // 반복문 for문으로 hexValue 탐색
+       // #ab1232 등으로 코드가 만들어 지도록 hexaValueRK 6번 탐색 되도록 한다.
+
+       for(var i = 0; i < 6; i++) {
+
+            // 1 : A
+            // 2 : B
+           var random = Math.floor(Math.random() * hexValues.length);
+           hexColor += hexValues[random];
+           console.log(hexColor);
+           // 1 : # + A = #A
+           // 2 : #A + B = #AB
+           // hexColor = hexColor + hexValues[random];
+
+           document.body.style.backgroundColor = hexColor;
+           hexValue.textContent = hexColor;
+       }
 
     }
-    */
+
 
 
 
@@ -449,7 +469,7 @@
 
 
     // 완성본 코드
-    /*
+/*
     var hexValue = document.getElementById('hex-value');
     var btn = document.getElementById('btn');
 
@@ -467,6 +487,6 @@
         document.body.style.backgroundColor = hexColor;
         hexValue.textContent = hexColor;
     }
-    */
-
-})();
+  
+*/
+})();   
