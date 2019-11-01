@@ -7,11 +7,30 @@
         btn.addEventListener('click', function (e) {
             e.preventDefault();
 
+            var value = e.target.dataset.filter;
+            // console.log(value);
+
+            var items = document.querySelectorAll('.store-item');
+            items.forEach(function(item){
+                if(value == 'all'){
+                    item.style.display = 'block';
+                } else {
+
+                    if(item.classList.contains(value)){
+                        item.style.display = "block";
+                    } else {
+                        item.style.display = "none";
+                    }
+
+                }
+            })
 
         })
     })
 
 })();
+
+
 
 
 // 검색 기능
@@ -24,6 +43,24 @@
         var items = document.querySelectorAll('.store-item');
 
         items.forEach(function (item) {
+            var type = item.dataset.item;
+            // console.log(typeof type);
+
+            /*
+            if(type.includes(value)){
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }*/
+
+            var length = value.length;
+            var match = type.slice(0, length);
+
+            if(value === match){
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
 
         })
 
@@ -38,7 +75,7 @@
     var cart = document.getElementById('cart');
 
     cartInfo.addEventListener('click', function () {
-
+        cart.classList.toggle('show-cart');
     })
 
 })();
@@ -52,9 +89,82 @@
     cartBtn.forEach(function (btn) {
         btn.addEventListener('click', function (e) {
             if (e.target.parentElement.classList.contains('store-item-icon')) {
+                
+                // 썸네일 이미지를 가져오는 코드 > src 속성에 접근
+                // img/xxx.jpg;
+                // img-cart/xxx.jpg;
+
+                // 1) img/xxx.jpg;
+                // 2) /xxx.jpg;
+                // 3) img-cart/xxx.jpg;
+
+                // 1)
+                var fullPath = e.target.parentElement.previousElementSibling.src;
+                var pos = fullPath.indexOf('img') + 3;
+                
+                // 2)
+                var partPath = fullPath.slice(pos);
+                console.log(partPath);
+
+                // 3) 썸네일, 제품명, 가격
+                var item = {};
+                item.img = `img-cart${partPath}`;
+
+                var name = e.target
+                            .parentElement.parentElement
+                            .nextElementSibling
+                            .children[0]
+                            .children[0]
+                            .textContent;
+
+                item.name = name;
+                
+                var price = e.target
+                            .parentElement.parentElement
+                            .nextElementSibling
+                            .children[0]
+                            .children[1]
+                            .textContent;
+
+                // console.log(price);
+
+                // $ 5  공백 지우기
+                var finalPrice = price.slice(1).trim(); // 앞 뒤 공백 제거
+                item.price = finalPrice;
+                // console.log(item);
+
+                var cartItem = document.createElement('div');
+                cartItem.classList.add(
+                    'cart-item',
+                    'd-flex',
+                    'justify-content-between',
+                    'text-capitalize',
+                    'my-3'
+                );
+
+                cartItem.innerHTML = `
+                <img src="${item.img}" class="img-fluid rounded-circle" id="item-img" alt="">
+                <div class="item-text">
+                    <p id="cart-item-title" class="font-weight-bold mb-0">${item.name}</p>
+                    <span>$</span>
+                    <span id="cart-item-price" class="cart-item-price" class="mb-0">${item.price}</span>
+                </div>
+                <a href="#" id='cart-item-remove' class="cart-item-remove">
+                    <i class="fas fa-trash"></i>
+                </a>
+            `;
+
+            var cart = document.getElementById('cart');
+            var total = document.querySelector('.cart-total-container');
+
+            cart.insertBefore(cartItem, total);
+            
+            
+            showTotals();
+               
 
 
-
+                
             }
         })
     });
@@ -66,9 +176,28 @@
         var total = [];
         var items = document.querySelectorAll('.cart-item-price');
 
-        /*document.getElementById('cart-total').textContent = ;
-        document.querySelector('.item-total').textContent = ;
-        document.getElementById('item-count').textContent = ;*/
+        // [10];
+        // [10, 20];
+        // [10, 20, 30];
+        items.forEach(function(item){
+            total.push(parseFloat(item.textContent));
+        })
+
+        var totalMoney = total.reduce(function(total, item){ // 콜백함수
+
+            total += item;
+            return total;
+
+        }, 0); // 덧셈 시작점이 0
+
+        // console.log(totalMoney);
+
+        var finalMoney = totalMoney.toFixed(2);
+        // console.log(finalMoney);
+
+        document.getElementById('cart-total').textContent = finalMoney;
+        document.querySelector('.item-total').textContent = finalMoney;
+        document.getElementById('item-count').textContent = total.length;
 
     }
 
